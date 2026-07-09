@@ -10,4 +10,5 @@ void main() {
     var streamExamples = new StreamExamples();
     streamExamples.progLangsExample();
     streamExamples.parDaysOfWeekWorkedExample();
+    streamExamples.numbersExample();
 }

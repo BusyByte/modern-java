@@ -2,6 +2,7 @@ package dev.shawngarner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Streams introduced in Java 8
@@ -66,5 +67,22 @@ public class StreamExamples {
                 .toList();
         daysWorked.forEach(IO::println);
         return daysWorked;
+    }
+
+    /*
+        Output:
+            4
+            16
+            36
+            64
+
+        Specialized stream for primitive int doesn't box values to Integer objects, which is more efficient.
+     */
+    public int [] numbersExample() {
+        return IntStream.range(1, 10)
+                .filter(n -> n % 2 == 0)
+                .map(n -> n * n)
+                .peek(IO::println)
+                .toArray();
     }
 }
