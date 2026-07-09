@@ -9,4 +9,5 @@ import dev.shawngarner.StreamExamples;
 void main() {
     var streamExamples = new StreamExamples();
     streamExamples.progLangsExample();
+    streamExamples.parDaysOfWeekWorkedExample();
 }
