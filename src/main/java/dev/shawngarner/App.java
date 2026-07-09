@@ -1,10 +1,12 @@
-package dev.shawngarner;
+import dev.shawngarner.StreamExamples;
 
-/**
- * Hello world!
+/*
+    Modern main function:
+     - no class or package needed
+     - public and static not needed
+     - no string args array
  */
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
+void main() {
+    var streamExamples = new StreamExamples();
+    streamExamples.progLangsExample();
 }
