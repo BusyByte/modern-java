@@ -2,7 +2,10 @@ package dev.shawngarner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Streams introduced in Java 8
@@ -84,5 +87,32 @@ public class StreamExamples {
                 .map(n -> n * n)
                 .peek(IO::println)
                 .toArray();
+    }
+
+    /*
+        Only 2 at a time will be processed in the ForkJoinPool
+        Output:
+            it's a bar: ForkJoinPool-1-worker-2
+            it's a baz: ForkJoinPool-1-worker-1
+            it's a foo: ForkJoinPool-1-worker-2
+            it's a bam: ForkJoinPool-1-worker-1
+            it's a bif: ForkJoinPool-1-worker-2
+     */
+    public List<String> controlledParallelExample() {
+        int parallelism = 2;
+        var pool = new ForkJoinPool(parallelism);
+
+        try {
+            return pool.submit(() -> Stream.of("foo", "bar", "baz", "bif", "bam")
+                    .parallel()
+                    .filter(s -> s.length() == 3)
+                    .map(s -> "it's a " + s)
+                    .peek(s -> IO.println(s + ": " + Thread.currentThread().getName()))
+                    .toList()).get();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.shutdown();
+        }
     }
 }

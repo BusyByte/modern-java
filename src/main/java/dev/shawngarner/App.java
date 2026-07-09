@@ -11,4 +11,5 @@ void main() {
     streamExamples.progLangsExample();
     streamExamples.parDaysOfWeekWorkedExample();
     streamExamples.numbersExample();
+    streamExamples.controlledParallelExample();
 }
