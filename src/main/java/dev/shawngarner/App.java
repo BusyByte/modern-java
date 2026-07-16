@@ -1,3 +1,4 @@
+import dev.shawngarner.RecordsExamples;
 import dev.shawngarner.StreamExamples;
 
 /*
@@ -7,9 +8,15 @@ import dev.shawngarner.StreamExamples;
      - no string args array
  */
 void main() {
-    var streamExamples = new StreamExamples();
-    streamExamples.progLangsExample();
-    streamExamples.parDaysOfWeekWorkedExample();
-    streamExamples.numbersExample();
-    streamExamples.controlledParallelExample();
+
+    var allExamples = Stream.of(
+            new StreamExamples(),
+            new RecordsExamples()
+    );
+    allExamples.forEach(example -> {
+        IO.println("Running example: " + example.exampleName());
+        example.runExamples();
+        IO.println();
+    });
+
 }

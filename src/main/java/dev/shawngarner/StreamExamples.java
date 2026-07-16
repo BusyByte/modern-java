@@ -10,7 +10,20 @@ import java.util.stream.Stream;
 /**
  * Streams introduced in Java 8
  */
-public class StreamExamples {
+public class StreamExamples implements ExampleRunner {
+
+    @Override
+    public String exampleName() {
+        return "StreamExamples";
+    }
+
+    @Override
+    public void runExamples() {
+        progLangsExample();
+        parDaysOfWeekWorkedExample();
+        numbersExample();
+        controlledParallelExample();
+    }
 
     /*
         Output:
@@ -19,6 +32,7 @@ public class StreamExamples {
             Have I learned Elixir? false
      */
     public List<String> progLangsExample() {
+        IO.println("Running progLangsExample");
         // modern var declaration added in Java 10 infers type
         var languages = Arrays.asList(
                 Arrays.asList("Java", "C++", "Scheme"),
@@ -41,6 +55,7 @@ public class StreamExamples {
         var containsElixir = languages.stream()
                 .anyMatch(s -> s.contains("Elixir"));
         IO.println("Have I learned Elixir? " + containsElixir); // Modern println - no System.out needed
+        IO.println();
 
         return sLanguages;
     }
@@ -62,6 +77,7 @@ public class StreamExamples {
         Items are not processed in order but final list maintains order.
      */
     public List<String> parDaysOfWeekWorkedExample() {
+        IO.println("Running parDaysOfWeekWorkedExample");
         var daysOfWeek = Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
         var daysWorked = daysOfWeek.stream().parallel()
                 .filter(d -> !d.startsWith("S"))
@@ -69,6 +85,7 @@ public class StreamExamples {
                 .peek(IO::println)
                 .toList();
         daysWorked.forEach(IO::println);
+        IO.println();
         return daysWorked;
     }
 
@@ -82,11 +99,14 @@ public class StreamExamples {
         Specialized stream for primitive int doesn't box values to Integer objects, which is more efficient.
      */
     public int [] numbersExample() {
-        return IntStream.range(1, 10)
+        IO.println("Running numbersExample");
+        var result =  IntStream.range(1, 10)
                 .filter(n -> n % 2 == 0)
                 .map(n -> n * n)
                 .peek(IO::println)
                 .toArray();
+        IO.println();
+        return result;
     }
 
     /*
@@ -99,16 +119,19 @@ public class StreamExamples {
             it's a bif: ForkJoinPool-1-worker-2
      */
     public List<String> controlledParallelExample() {
+        IO.println("Running controlledParallelExample");
         int parallelism = 2;
         var pool = new ForkJoinPool(parallelism);
 
         try {
-            return pool.submit(() -> Stream.of("foo", "bar", "baz", "bif", "bam")
+            var result =  pool.submit(() -> Stream.of("foo", "bar", "baz", "bif", "bam")
                     .parallel()
                     .filter(s -> s.length() == 3)
                     .map(s -> "it's a " + s)
                     .peek(s -> IO.println(s + ": " + Thread.currentThread().getName()))
                     .toList()).get();
+            IO.println();
+            return result;
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
